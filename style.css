@@ -1,0 +1,518 @@
+/* --- Global Reset --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    transition: background 0.4s, color 0.4s, border-color 0.4s, box-shadow 0.4s;
+}
+
+/* --- Theme Variables (Dark Mode Default: Space Theme) --- */
+:root {
+    --bg: #0a0e21;
+    --card-bg: rgba(255, 255, 255, 0.08);
+    --text: #e0e0f0;
+    --accent-main: #3498db;
+    --accent-secondary: #f39c12;
+    --shadow: rgba(0, 0, 0, 0.5);
+    --border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* --- Light Mode Variables --- */
+body.light {
+    --bg: #eef1f5; 
+    --card-bg: rgba(255, 255, 255, 0.85); 
+    --text: #333;
+    --accent-main: #007bff; 
+    --accent-secondary: #e74c3c; 
+    --shadow: rgba(0, 0, 0, 0.15);
+    --border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* --- Body and Layout --- */
+body {
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+}
+
+.main-wrap {
+    width: 100%;
+    max-width: 1200px;
+    height: 90vh;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 80px var(--shadow);
+    background: var(--bg);
+}
+
+/* --- Header and Theme Toggle --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(0,0,0,0.2); 
+    backdrop-filter: blur(5px);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-main);
+    text-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.theme-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--text);
+    box-shadow: 0 2px 10px var(--shadow);
+}
+
+/* --- Content Layout --- */
+.content-wrapper {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding-top: 66px; 
+}
+
+/* --- PANE STYLES --- */
+.pane {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    transition: transform 0.6s ease-in-out;
+    padding-top: 66px;
+}
+
+.left-pane {
+    left: 0;
+    background: var(--bg);
+    z-index: 10;
+}
+
+.right-pane {
+    left: 100%; 
+    background: var(--bg);
+    z-index: 101; 
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px 30px 30px 30px; 
+}
+
+/* --- Slide Animation --- */
+.left-pane.shifted {
+    transform: translateX(-100%); 
+}
+
+.right-pane.active {
+    transform: translateX(-100%); 
+}
+
+/* --- Globe --- */
+#globeContainer {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#globeContainer canvas {
+    display: block;
+    cursor: grab;
+}
+
+.globe-message {
+    position: absolute;
+    color: var(--text);
+    font-size: 1.2rem;
+    opacity: 0.7;
+}
+
+/* --- Map Display --- */
+.map-container {
+    height: 8vh;
+    min-height: 100px;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 5px 20px var(--shadow);
+}
+
+/* --- Overlay Controls --- */
+.overlay-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px;
+    z-index: 20; 
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    pointer-events: none; 
+}
+
+.weather-controls {
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+    pointer-events: auto; 
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap; 
+    width: 100%; 
+}
+
+.autocomplete-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 280px;
+}
+
+#cityInput {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    backdrop-filter: blur(5px);
+}
+#cityInput::placeholder {
+    color: var(--text);
+    opacity: 0.6;
+}
+
+/* --- Suggestions --- */
+.suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 0 0 10px 10px;
+    background: var(--card-bg);
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    box-shadow: 0 5px 20px var(--shadow);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestions-list li {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.suggestions-list li:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.suggestions-list.hidden {
+    display: none;
+}
+
+/* --- Buttons --- */
+.primary-btn, .secondary-btn {
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, border-color 0.2s;
+    flex: 1;
+    min-width: 120px;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.7);
+    background: #2980b9; 
+}
+
+.secondary-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 15px rgba(243, 156, 18, 0.6);
+    background: var(--accent-secondary); 
+    color: var(--bg); 
+}
+
+.primary-btn {
+    background: var(--accent-main);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.5);
+}
+
+.secondary-btn {
+    background: transparent;
+    color: var(--accent-secondary);
+    border: 2px solid var(--accent-secondary);
+    box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+}
+
+.back-btn {
+    position: relative; 
+    margin-bottom: 15px; 
+    background: var(--accent-secondary);
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 3px 10px var(--shadow);
+    pointer-events: auto;
+    width: fit-content;
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.back-btn:hover {
+    transform: translateY(1px);
+    background: #e67e22;
+    box-shadow: 0 1px 5px var(--shadow);
+}
+
+/* --- Weather Cards --- */
+.card.glass {
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 30px var(--shadow);
+    pointer-events: auto;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.current-weather {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.current-weather h3 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent-secondary);
+}
+
+.current-weather p {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.current-weather-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+.current-weather-icon img {
+    width: 100%;
+}
+
+.forecast-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text);
+    opacity: 0.9;
+}
+
+.forecast-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.forecast-day {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.1);
+    transition: background 0.2s;
+}
+
+.forecast-day img {
+    width: 40px;
+    height: 40px;
+    margin: 5px 0;
+}
+
+/* --- Utility --- */
+.hidden { display: none !important; }
+
+.message-box {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.message-box.loading {
+    background: var(--accent-main);
+    color: #fff;
+}
+
+.message-box.error {
+    background: var(--accent-secondary);
+    color: #fff;
+}
+
+/* --- Details Grid --- */
+.details-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.detail-item {
+    flex: 1;
+    text-align: center;
+    padding: 10px 5px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.detail-item small {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-bottom: 3px;
+}
+
+.detail-item strong {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.forecast-detail {
+    font-size: 0.75rem;
+    margin: 2px 0;
+    opacity: 0.8;
+}
+
+/* --- Media Queries --- */
+@media (max-width: 900px) {
+    .main-wrap {
+        height: 100vh;
+        width: 100vw;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    .content-wrapper {
+        display: block;
+    }
+    .left-pane, .right-pane {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        padding-top: 66px;
+    }
+
+    .overlay-controls {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 15px;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(8px);
+    }
+    
+    .weather-controls {
+        gap: 8px;
+        flex-direction: column;
+    }
+
+    .button-group {
+        gap: 8px;
+    }
+
+    .primary-btn, .secondary-btn {
+        flex: 1;
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+
+    .right-pane {
+        padding: 66px 15px 15px 15px;
+        justify-content: flex-start;
+    }
+
+    .map-container {
+        height: 100px;
+    }
+
+    .card.glass {
+        max-height: 60vh;
+    }
+
+    .back-btn {
+        position: relative;
+        margin-bottom: 15px; 
+    }
+
+    .forecast-grid {
+        flex-wrap: wrap;
+    }
+    .forecast-day {
+        flex: 1 1 45%;
+    }
+    .details-grid {
+        flex-wrap: wrap;
+    }
+    .detail-item {
+        flex: 1 1 45%;
+    }
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Weather Globe Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div class="main-wrap">
+        <header>
+            <h1 class="title">🌎 Weather Globe</h1>
+            <button id="themeToggle" class="theme-btn">☀️</button> 
+        </header>
+
+        <div class="content-wrapper">
+            <div id="globePane" class="pane left-pane active">
+                <div id="globeContainer">
+                    <div id="globeLoading" class="globe-message">Loading Real-Time Earth Model...</div>
+                </div>
+            </div>
+
+            <div id="mapPane" class="pane right-pane">
+                <button id="backBtn" class="back-btn">← Back to Globe</button>
+                
+                <div id="mapDisplay" class="map-container">
+                    </div>
+                <div id="message" class="message-box hidden"></div>
+                
+                <section id="weatherDisplay" class="card glass hidden">
+                    </section>
+            </div>
+            
+            <div class="overlay-controls">
+                 <div class="weather-controls">
+                    <div class="autocomplete-wrap">
+                        <input type="text" id="cityInput" placeholder="Search city (e.g. London)"/>
+                        <ul id="suggestionsList" class="suggestions-list hidden"></ul>
+                    </div>
+                    <div class="button-group">
+                        <button id="searchBtn" class="primary-btn">Search</button>
+                        <button id="locBtn" class="secondary-btn">📍 Use My Location</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
